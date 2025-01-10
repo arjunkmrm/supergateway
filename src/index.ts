@@ -16,6 +16,7 @@ import { hideBin } from 'yargs/helpers'
 import { Server } from '@modelcontextprotocol/sdk/server/index.js'
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js'
 import { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js'
+import cors from 'cors'
 
 async function main() {
   const argv = yargs(hideBin(process.argv))
@@ -65,6 +66,12 @@ async function main() {
   let sseTransport: SSEServerTransport | undefined
 
   const app = express()
+
+  app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+  }))
 
   app.use((req, res, next) => {
     if (req.path === '/message') {
